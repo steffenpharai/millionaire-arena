@@ -14,8 +14,8 @@ Follow-up UX automation on branches `ux-iteration-1` … `ux-iteration-5`. Resea
 
 ## Iteration 3 (ux-iteration-3)
 
-- **Iteration 3:** Real-time leaderboard with avatars/display names; pot feed banner; shareable recap.
-- **Iteration 4:** Embedded XMTP chat panel; pot feed banners; shareable recaps.
+- **Done:** Leaderboard: avatar circles (initials from displayName or address), display names when API returns them (fallback truncated address); pot feed banner on home ("Feed now—gasless stake!") dismissible via localStorage; results page Share recap (navigator.share or copy link + "Reached Q15—join!"); ArenaFooter on results.
+- **Iteration 4:** Post-game confetti, loss feedback, dark/light/high-contrast.
 - **Iteration 5:** Post-game confetti on win; loss feedback; dark/light mode toggle; optional AI suggestions.
 
 Each iteration: create branch from `feat/core-agent-miniapp`, apply changes, run Cypress and Lighthouse (accessibility), document score in this file, push and open PR.
