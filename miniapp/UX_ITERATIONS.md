@@ -15,7 +15,9 @@ Follow-up UX automation on branches `ux-iteration-1` … `ux-iteration-5`. Resea
 ## Iteration 3 (ux-iteration-3)
 
 - **Done:** Leaderboard: avatar circles (initials from displayName or address), display names when API returns them (fallback truncated address); pot feed banner on home ("Feed now—gasless stake!") dismissible via localStorage; results page Share recap (navigator.share or copy link + "Reached Q15—join!"); ArenaFooter on results.
-- **Iteration 4:** Post-game confetti, loss feedback, dark/light/high-contrast.
-- **Iteration 5:** Post-game confetti on win; loss feedback; dark/light mode toggle; optional AI suggestions.
+## Iteration 4 (ux-iteration-4)
+
+- **Done:** Post-game: confetti on /results?outcome=win (canvas-confetti); loss feedback on ?outcome=loss ("Practice hard trivia"); gasless claim copy on win. Theme: dark / light / high-contrast via footer toggle (ThemeProvider + data-theme, localStorage); CSS variables in globals.css for each theme; WCAG-friendly high-contrast palette.
+- **Iteration 5:** Error handling, mobile breakpoints, final tests & PRs.
 
 Each iteration: create branch from `feat/core-agent-miniapp`, apply changes, run Cypress and Lighthouse (accessibility), document score in this file, push and open PR.

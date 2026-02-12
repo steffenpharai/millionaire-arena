@@ -6,10 +6,10 @@ const config: Config = {
     extend: {
       colors: {
         arena: {
-          bg: "#0a0a0a",
-          fg: "#fafafa",
-          muted: "#a1a1aa",
-          accent: "#3b82f6",
+          bg: "var(--bg)",
+          fg: "var(--fg)",
+          muted: "var(--muted)",
+          accent: "var(--accent)",
         },
       },
     },
