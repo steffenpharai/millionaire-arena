@@ -109,22 +109,30 @@ See `.env.example`. Key groups:
 
 ## Testing and deploy order (plan §11)
 
-1. **Unit:** OpenTDB mapping (easy/medium/hard → Q1–15), obfuscation/decode tool, token tax/burn: `cd agent-backend && npm run test`; `cd contracts && forge test` (from WSL if Forge is there).
-2. **Integration:** Agent tools (Game Master + OpenTDB, decode); Payment with Paymaster on Base Sepolia (manual or CI with keys); XMTP agent receive/send (manual with XMTP env).
-3. **E2E:** Join flow, ladder mapping, decode round-trip: `npm run test:e2e` from repo root.
-4. **Deploy:** Base Sepolia first, then mainnet with policy and compliance in place.
+1. **Unit (agent):** Jest in `agent-backend/`: OpenTDB mapping, fetchLadderQuestion, obfuscate/decode tool, manageLadderState: `cd agent-backend && npm run test`.
+2. **Unit (contracts):** `cd contracts && forge test` (from WSL if Forge is there).
+3. **E2E (root):** Join flow, ladder mapping, decode round-trip: `npm run test:e2e` from repo root.
+4. **E2E (miniapp):** Cypress for ladder, game, feed-pot: `cd miniapp && npm run test:e2e` (run with `npm run dev` in another terminal so the app is served at http://localhost:3000).
+5. **Deploy:** Base Sepolia first, then mainnet with policy and compliance in place.
 
 ## Verification
 
-- Run from repo root: `npm run test` (agent unit + e2e). From WSL in `contracts/`: `forge test`.
+- Run from repo root: `npm run test` (agent Jest + root e2e). From WSL in `contracts/`: `forge test`. For miniapp Cypress: start miniapp with `cd miniapp && npm run dev`, then `cd miniapp && npm run test:e2e`.
 - All tests must pass before considering the implementation complete.
+
+## Progress (core agent + miniapp iteration)
+
+- **Agent backend:** Custom tools (fetchLadderQuestion, obfuscateQuestion, manageLadderState), decode tool (LangChain). XMTP: `/arena join`, stake command parsing, rich preview. Swarm: Game Master + Social Coordinator wired in index. Gasless API: `POST /api/stake` and `POST /api/contribute` return encoded calldata for Paymaster (allowlist: stake, contributeToPot).
+- **Mini-app:** Base manifest, ladder (progress bar, safe milestones), game (timer, lifelines, plain/obfuscated view), leaderboard, feed-pot with gasless preview. viem for future one-tap submit; XMTP noted in lobby.
+- **Contracts:** Deploy script fixed (MillionToken with deployer placeholder, then ArenaPot, then setPotAddress). Seed script in `deploy/seed-pot.ts`.
+- **Tests:** Jest (agent-backend), Cypress (miniapp), root e2e critical path.
 
 ## Compliance and disclaimers
 
 - **Skill-based:** Contest is based on knowledge/skill only.
 - **No purchase necessary:** Entry path without payment is available.
-- **NY-friendly:** Disclaimers in app and README; no gambling messaging.
-- In-app: footer/modal with "No purchase necessary" and short skill-based disclaimer; link to full terms.
+- **NY-friendly:** This contest is structured as skill-based where applicable. Not gambling. Disclaimers appear in the app footer and README; no gambling messaging. Participants in NY and other jurisdictions should review local rules.
+- In-app: footer with "No purchase necessary", "Skill-based contest", "Not gambling", and link to full terms (see `miniapp/app/terms`).
 
 ## References
 

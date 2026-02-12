@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { ArenaFooter } from "./components/ArenaFooter";
 
 export default function Home() {
   useEffect(() => {
@@ -59,9 +60,7 @@ export default function Home() {
           Post-win distribution
         </Link>
       </nav>
-      <footer className="mt-8 pt-4 border-t border-arena-muted text-sm text-arena-muted">
-        No purchase necessary. Skill-based knowledge contest. Not gambling. <Link href="/terms" className="underline">Terms</Link>.
-      </footer>
+      <ArenaFooter />
     </main>
   );
 }

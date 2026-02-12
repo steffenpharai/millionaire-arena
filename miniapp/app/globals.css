@@ -7,6 +7,7 @@
   --fg: #fafafa;
   --muted: #a1a1aa;
   --accent: #3b82f6;
+  /* WCAG AA: contrast ratio ≥ 4.5:1 for normal text */
 }
 * {
   box-sizing: border-box;

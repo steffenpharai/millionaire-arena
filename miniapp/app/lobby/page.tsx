@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ArenaFooter } from "../components/ArenaFooter";
 
 const API = process.env.NEXT_PUBLIC_AGENT_API_URL || "";
 
@@ -17,25 +18,26 @@ export default function LobbyPage() {
   }, []);
 
   return (
-    <main style={{ padding: "1.5rem", maxWidth: "480px", margin: "0 auto" }}>
-      <h1 style={{ fontSize: "1.5rem", marginBottom: "1rem" }}>Lobby</h1>
-      <p style={{ color: "var(--muted)", marginBottom: "1rem" }}>
+    <main className="min-h-screen bg-arena-bg text-arena-fg p-6 max-w-md mx-auto">
+      <h1 className="text-xl font-semibold mb-4">Lobby</h1>
+      <p className="text-arena-muted text-sm mb-4">
         Join an arena via chat: type <strong>/arena join</strong> then open this app.
       </p>
+      <p className="text-arena-muted text-sm mb-4">
+        Team chat: use Base App chat (XMTP) for group coordination and lifeline polls.
+      </p>
       {lobbies.length > 0 ? (
-        <ul style={{ listStyle: "none", padding: 0 }}>
+        <ul className="list-none p-0 space-y-2">
           {lobbies.map((l) => (
-            <li key={l.id} style={{ padding: "0.5rem 0", borderBottom: "1px solid var(--muted)" }}>
-              Arena {l.id.slice(0, 8)} — {l.count} player(s)
+            <li key={l.id} className="py-2 border-b border-arena-muted">
+              Arena {l.id.slice(0, 8)}… — {l.count} player(s)
             </li>
           ))}
         </ul>
       ) : (
-        <p style={{ color: "var(--muted)" }}>No active lobbies. Start one in chat with /arena join.</p>
+        <p className="text-arena-muted">No active lobbies. Start one in chat with /arena join.</p>
       )}
-      <footer style={{ marginTop: "2rem", fontSize: "0.875rem", color: "var(--muted)" }}>
-        No purchase necessary. Skill-based contest.
-      </footer>
+      <ArenaFooter />
     </main>
   );
 }

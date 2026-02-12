@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { ArenaFooter } from "../components/ArenaFooter";
 
 const API = process.env.NEXT_PUBLIC_AGENT_API_URL || "";
 
@@ -35,9 +36,7 @@ export default function LeaderboardPage() {
       ) : (
         <p className="text-arena-muted">No scores yet. Join an arena and play!</p>
       )}
-      <footer className="mt-8 pt-4 border-t border-arena-muted text-sm text-arena-muted">
-        No purchase necessary. Skill-based contest. <Link href="/terms" className="underline">Terms</Link>
-      </footer>
+      <ArenaFooter />
     </main>
   );
 }

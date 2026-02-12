@@ -11,17 +11,15 @@ contract DeployScript is Script {
         address deployer = vm.addr(deployerPrivateKey);
         vm.startBroadcast(deployerPrivateKey);
 
-        // Deploy pot first (token needs pot address). Use deployer as placeholder for pot/lp.
-        ArenaPot pot = new ArenaPot(address(0));
-        console.log("ArenaPot deployed at:", address(pot));
-
-        MillionToken token = new MillionToken(address(pot), deployer, deployer);
+        // MillionToken constructor needs pot and lp addresses. Use deployer as temporary placeholder.
+        MillionToken token = new MillionToken(deployer, deployer, deployer);
         console.log("MillionToken deployed at:", address(token));
 
-        pot = new ArenaPot(address(token));
-        console.log("ArenaPot (final) deployed at:", address(pot));
+        ArenaPot pot = new ArenaPot(address(token));
+        console.log("ArenaPot deployed at:", address(pot));
 
         token.setPotAddress(address(pot));
+        // Optionally set LP: token.setLPAddress(lpAddress);
         vm.stopBroadcast();
     }
 }

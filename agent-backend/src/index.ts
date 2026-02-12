@@ -1,18 +1,31 @@
 /**
- * Millionaire Arena agent backend: XMTP listener + multi-agent swarm (Game Master, Social, Payment, Ecosystem).
- * Plan: AgentKit + LangChain patterns; /arena join shares mini-app; Redis for sessions.
+ * Millionaire Arena agent backend: XMTP listener + multi-agent swarm (Game Master, Social, Payment).
+ * Plan: AgentKit + LangChain tools; /arena join shares mini-app; stake commands; Redis for sessions.
  */
 
 import "dotenv/config";
 import http from "node:http";
 import { Agent } from "@xmtp/agent-sdk";
 import IORedis from "ioredis";
-import { isArenaJoinCommand, getArenaJoinReply, createOrJoinLobby } from "./xmtp-handler.js";
-import { decodeArenaQuestion } from "./tools/index.js";
+import {
+  isArenaJoinCommand,
+  getArenaJoinReplyRich,
+  createOrJoinLobby,
+  isStakeCommand,
+  parseStakeAmount,
+  getStakeReply,
+} from "./xmtp-handler.js";
+import {
+  decodeArenaQuestion,
+  fetchLadderQuestionForIndex,
+  createManageLadderStateTool,
+} from "./tools/index.js";
 import { listLobbies } from "./api/lobbies.js";
+import { prepareStakeCall, prepareContributeCall } from "./agents/payment-economy.js";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const redis = new (IORedis as any)(process.env.REDIS_URL || "redis://localhost:6379");
+const manageLadderStateTool = createManageLadderStateTool(redis);
 
 function startApiServer(port: number) {
   const server = http.createServer(async (req, res) => {
@@ -35,9 +48,56 @@ function startApiServer(port: number) {
     if (req.method === "POST" && req.url === "/api/contribute") {
       let body = "";
       req.on("data", (c) => { body += c; });
-      req.on("end", () => {
-        res.setHeader("Content-Type", "application/json");
-        res.end(JSON.stringify({ ok: true, message: "Contribute (gasless) would be sent via Paymaster" }));
+      req.on("end", async () => {
+        try {
+          const json = JSON.parse(body || "{}") as { roundId?: string; amountWei?: string };
+          const roundId = json.roundId ?? "";
+          const amountWei = json.amountWei ?? "0";
+          const potAddress = (process.env.POT_CONTRACT_ADDRESS || process.env.NEXT_PUBLIC_POT_CONTRACT_ADDRESS) as `0x${string}` | undefined;
+          if (!potAddress) {
+            res.statusCode = 500;
+            res.end(JSON.stringify({ error: "POT_CONTRACT_ADDRESS not configured" }));
+            return;
+          }
+          const call = await prepareContributeCall(
+            { roundId, amountWei, userAddress: "" },
+            potAddress
+          );
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify({ ok: true, to: call.to, data: call.data }));
+        } catch (e) {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: String(e) }));
+        }
+      });
+      return;
+    }
+    if (req.method === "POST" && req.url === "/api/stake") {
+      let body = "";
+      req.on("data", (c) => { body += c; });
+      req.on("end", async () => {
+        try {
+          const json = JSON.parse(body || "{}") as { roundId?: string; amountWei?: string };
+          const roundId = json.roundId ?? "";
+          const amountWei = json.amountWei ?? "0";
+          const potAddress = (process.env.POT_CONTRACT_ADDRESS || process.env.NEXT_PUBLIC_POT_CONTRACT_ADDRESS) as `0x${string}` | undefined;
+          const paymasterUrl = process.env.PAYMASTER_URL || "";
+          if (!potAddress) {
+            res.statusCode = 500;
+            res.end(JSON.stringify({ error: "POT_CONTRACT_ADDRESS not configured" }));
+            return;
+          }
+          const call = await prepareStakeCall(
+            { roundId, amountWei, userAddress: "" },
+            potAddress,
+            paymasterUrl
+          );
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify({ ok: true, to: call.to, data: call.data, value: call.value.toString() }));
+        } catch (e) {
+          res.statusCode = 500;
+          res.end(JSON.stringify({ error: String(e) }));
+        }
       });
       return;
     }
@@ -55,22 +115,62 @@ async function main() {
   });
 
   agent.on("text", async (ctx: unknown) => {
-    const c = ctx as { content?: unknown; conversation?: { sendText?: (msg: string) => Promise<unknown> }; senderAddress?: string; conversationId?: string };
+    const c = ctx as {
+      content?: unknown;
+      conversation?: { sendText?: (msg: string) => Promise<unknown> };
+      senderAddress?: string;
+      conversationId?: string;
+    };
     const text = typeof c.content === "string" ? c.content : "";
     const send = async (msg: string) => {
       if (c.conversation?.sendText) await c.conversation.sendText(msg);
     };
+
     if (isArenaJoinCommand(text)) {
-      await send(getArenaJoinReply());
+      const reply = await getArenaJoinReplyRich(redis, c.conversationId || "dm");
+      await send(reply);
       if (c.senderAddress) {
         const lobbyMsg = await createOrJoinLobby(redis, c.conversationId || "dm", c.senderAddress);
         await send(lobbyMsg);
       }
       return;
     }
+
+    if (isStakeCommand(text)) {
+      const amount = parseStakeAmount(text);
+      if (amount != null) await send(getStakeReply(amount));
+      return;
+    }
+
+    const getQuestionMatch = text.match(/get\s+question\s+(\d+)|question\s+(\d+)/i);
+    if (getQuestionMatch) {
+      const idx = parseInt(getQuestionMatch[1] || getQuestionMatch[2]!, 10);
+      if (idx >= 1 && idx <= 15) {
+        const q = await fetchLadderQuestionForIndex(idx);
+        if (q) await send(`Q${idx}: ${q.question}\nAnswers: ${q.answers.join(", ")}`);
+        else await send(`No question available for step ${idx}.`);
+      }
+      return;
+    }
+
+    const ladderStateMatch = text.match(/ladder\s+state\s+(\S+)\s+round\s+(\d+)/i);
+    if (ladderStateMatch) {
+      const [, arenaId, roundStr] = ladderStateMatch;
+      const round = parseInt(roundStr!, 10);
+      const out = await manageLadderStateTool.invoke({
+        arenaId: arenaId!,
+        round,
+        action: "get",
+      });
+      await send(String(out));
+      return;
+    }
+
     if (text.includes("decode") && text.length > 20) {
       const decoded = decodeArenaQuestion(text);
-      const out = decoded ? `Decoded: ${decoded.question} | Answers: ${decoded.answers.join(", ")}` : "Could not decode.";
+      const out = decoded
+        ? `Decoded: ${decoded.question} | Answers: ${decoded.answers.join(", ")}`
+        : "Could not decode.";
       await send(out);
     }
   });
