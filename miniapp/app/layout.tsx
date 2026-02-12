@@ -7,6 +7,8 @@ const siteUrl = process.env.NEXT_PUBLIC_URL || "https://millionaire-arena.exampl
 const ogTitle = "Millionaire Arena";
 const ogDescription = "Skill-based trivia battle royale on Base. Join the pot, climb the ladder—gasless. No purchase necessary.";
 
+export const viewport = { width: "device-width", initialScale: 1, maximumScale: 5 };
+
 export const metadata: Metadata = {
   title: ogTitle,
   description: ogDescription,

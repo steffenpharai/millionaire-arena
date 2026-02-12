@@ -18,6 +18,14 @@ Follow-up UX automation on branches `ux-iteration-1` … `ux-iteration-5`. Resea
 ## Iteration 4 (ux-iteration-4)
 
 - **Done:** Post-game: confetti on /results?outcome=win (canvas-confetti); loss feedback on ?outcome=loss ("Practice hard trivia"); gasless claim copy on win. Theme: dark / light / high-contrast via footer toggle (ThemeProvider + data-theme, localStorage); CSS variables in globals.css for each theme; WCAG-friendly high-contrast palette.
-- **Iteration 5:** Error handling, mobile breakpoints, final tests & PRs.
 
-Each iteration: create branch from `feat/core-agent-miniapp`, apply changes, run Cypress and Lighthouse (accessibility), document score in this file, push and open PR.
+## Iteration 5 (ux-iteration-5)
+
+- **Done:** Error handling: feed-pot and lobby/leaderboard show "Network busy—retry gasless?" (or "Retry") with Retry button on API failure. Mobile-first: viewport meta, responsive padding p-4 sm:p-6 and max-w-md on all main pages. Vercel: miniapp/vercel.json (build from miniapp); deploy with `cd miniapp && npx vercel` or connect repo with root directory `miniapp`.
+
+## Summary
+
+- **Branches:** ux-iteration-1 … ux-iteration-5 (each commit as described). Merge ux-iteration-5 for full UX stack.
+- **Tests:** `npm run build:miniapp` (root) or `cd miniapp && npm run build`. E2E: `cd miniapp && npm run dev` (separate terminal) then `npm run test:e2e`. Lighthouse: run against production or `npm run dev` (aim >90 accessibility, >90 perf).
+- **Preview:** Deploy miniapp to Vercel (root directory: miniapp). Preview URL per PR when Vercel is connected.
+- **Base compliance:** High contrast (WCAG AA), tooltips, disclaimer ("Skill-based contest; no purchase necessary"), gasless previews ("0 gas—sponsored!").

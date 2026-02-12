@@ -35,6 +35,11 @@ export default function FeedPotPage() {
     }
   };
 
+  const retry = () => {
+    setStatus("idle");
+    setPreview(null);
+  };
+
   const handleFeedPot = async () => {
     if (!roundId.trim()) return;
     setStatus("loading");
@@ -57,7 +62,7 @@ export default function FeedPotPage() {
   };
 
   return (
-    <main className="min-h-screen bg-arena-bg text-arena-fg p-6 max-w-md mx-auto">
+    <main className="min-h-screen bg-arena-bg text-arena-fg p-4 sm:p-6 max-w-md mx-auto">
       <h1 className="text-xl font-semibold mb-4">Feed the pot</h1>
       <p className="text-arena-muted text-sm mb-4">
         Community contributions go to the arena pot. 0 gas—sponsored! One-tap preview below.
@@ -105,7 +110,16 @@ export default function FeedPotPage() {
         </div>
       )}
       {status === "error" && (
-        <p className="mt-2 text-red-400 text-sm">Request failed. Check backend and POT_CONTRACT_ADDRESS.</p>
+        <div className="mt-4 p-3 rounded border border-red-400/50 bg-red-400/10" role="alert">
+          <p className="text-red-400 text-sm">Network busy—retry gasless?</p>
+          <button
+            type="button"
+            onClick={retry}
+            className="mt-2 text-sm py-2 px-3 rounded bg-arena-accent text-white min-h-[44px]"
+          >
+            Retry
+          </button>
+        </div>
       )}
       <ArenaFooter />
     </main>

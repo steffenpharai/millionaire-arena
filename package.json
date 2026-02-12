@@ -6,7 +6,8 @@
     "test:e2e": "npx tsx tests/e2e/critical-path.test.ts",
     "test": "npm run test:agent && npm run test:e2e",
     "build:agent": "cd agent-backend && npm run build",
-    "build:miniapp": "cd miniapp && npm run build"
+    "build:miniapp": "cd miniapp && npm run build",
+    "deploy:miniapp": "cd miniapp && npm run build && npx vercel --yes"
   },
   "devDependencies": {
     "tsx": "^4.21.0"

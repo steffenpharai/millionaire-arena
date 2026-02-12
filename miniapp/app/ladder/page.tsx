@@ -10,7 +10,7 @@ const LADDER_SIZE = 15;
 
 export default function LadderPage() {
   return (
-    <main className="min-h-screen bg-arena-bg text-arena-fg p-6 max-w-md mx-auto">
+    <main className="min-h-screen bg-arena-bg text-arena-fg p-4 sm:p-6 max-w-md mx-auto">
       <h1 className="text-xl font-semibold mb-2">15-Question Ladder</h1>
       <p className="text-arena-muted text-sm mb-4">US show style. Safe at Q5 and Q10.</p>
 

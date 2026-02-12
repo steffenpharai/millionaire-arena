@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import { ArenaFooter } from "../components/ArenaFooter";
 
@@ -18,19 +18,24 @@ function initials(entry: LeaderboardEntry): string {
 export default function LeaderboardPage() {
   const [scores, setScores] = useState<LeaderboardEntry[]>([]);
 
-  useEffect(() => {
-    if (API) {
-      fetch(`${API}/api/leaderboard`)
-        .catch(() => {})
-        .then((r) => (r?.ok ? r.json() : null))
-        .then((d) => {
-          if (Array.isArray(d)) setScores(d);
-        });
-    }
+  const [error, setError] = useState(false);
+  const fetchScores = useCallback(() => {
+    if (!API) return;
+    setError(false);
+    fetch(`${API}/api/leaderboard`)
+      .then((r) => (r?.ok ? r.json() : null))
+      .then((d) => {
+        if (Array.isArray(d)) setScores(d);
+      })
+      .catch(() => setError(true));
   }, []);
 
+  useEffect(() => {
+    fetchScores();
+  }, [fetchScores]);
+
   return (
-    <main className="min-h-screen bg-arena-bg text-arena-fg p-6 max-w-md mx-auto">
+    <main className="min-h-screen bg-arena-bg text-arena-fg p-4 sm:p-6 max-w-md mx-auto">
       <h1 className="text-xl font-semibold mb-4">Real-time leaderboard</h1>
       <p className="text-arena-muted text-sm mb-4">Top players in the current arena. Display names when available.</p>
       {scores.length > 0 ? (
@@ -50,6 +55,11 @@ export default function LeaderboardPage() {
             </li>
           ))}
         </ol>
+      ) : error ? (
+        <div className="p-3 rounded border border-red-400/50 bg-red-400/10" role="alert">
+          <p className="text-red-400 text-sm">Network busy—retry?</p>
+          <button type="button" onClick={fetchScores} className="mt-2 text-sm py-2 px-3 rounded bg-arena-accent text-white min-h-[44px]">Retry</button>
+        </div>
       ) : (
         <p className="text-arena-muted">No scores yet. Join an arena and play!</p>
       )}

@@ -31,7 +31,7 @@ export default function GamePage() {
   const strokeDash = circumference * (1 - progress);
 
   return (
-    <main className="min-h-screen bg-arena-bg text-arena-fg p-6 max-w-md mx-auto">
+    <main className="min-h-screen bg-arena-bg text-arena-fg p-4 sm:p-6 max-w-md mx-auto">
       <h1 className="text-xl font-semibold mb-2">Round 1</h1>
 
       <div className="flex items-center gap-4 mb-6" aria-live="polite" aria-atomic="true">

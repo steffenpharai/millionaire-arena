@@ -50,7 +50,7 @@ function ResultsContent() {
   const isLoss = outcome === "loss";
 
   return (
-    <main className="min-h-screen bg-arena-bg text-arena-fg p-6 max-w-md mx-auto">
+    <main className="min-h-screen bg-arena-bg text-arena-fg p-4 sm:p-6 max-w-md mx-auto">
       {isWin && (
         <p className="text-arena-accent font-semibold mb-4" role="status">
           You won! Claim your share—gasless when supported.
@@ -91,7 +91,7 @@ function ResultsContent() {
 export default function ResultsPage() {
   return (
     <Suspense fallback={
-      <main className="min-h-screen bg-arena-bg text-arena-fg p-6 max-w-md mx-auto">
+      <main className="min-h-screen bg-arena-bg text-arena-fg p-4 sm:p-6 max-w-md mx-auto">
         <p className="text-arena-muted">Loading…</p>
       </main>
     }>
