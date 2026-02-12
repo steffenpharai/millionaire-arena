@@ -68,9 +68,11 @@ forge test
 cd agent-backend
 npm install
 npm run build
-# Set env: CDP_*, OPENAI_API_KEY, XMTP_*, REDIS_URL, PAYMASTER_URL, etc.
+# Set env: CDP_*, XAI_API_KEY (or OPENAI_API_KEY), XMTP_*, REDIS_URL, PAYMASTER_URL, etc.
 npm start
 ```
+
+**xAI orchestration:** The agent uses [Vercel AI SDK + @ai-sdk/xai](https://sdk.vercel.ai/providers/ai-sdk-providers/xai) with `grok-4-1-fast-reasoning` for freeform chat. Set `XAI_API_KEY` in `.env` (repo root or agent-backend). Test with: `cd agent-backend && npm run test:orchestration` (uses `.env` only).
 
 ### 4. Mini-app
 
@@ -86,6 +88,7 @@ npm run dev
 See `.env.example`. Key groups:
 
 - **CDP:** `CDP_API_KEY_NAME`, `CDP_API_KEY_PRIVATE_KEY`, `NETWORK_ID` (base-sepolia / base-mainnet)
+- **xAI (orchestration):** `XAI_API_KEY` for agent freeform chat (grok-4-1-fast-reasoning via Vercel AI SDK)
 - **XMTP:** `XMTP_WALLET_KEY`, `XMTP_DB_ENCRYPTION_KEY`, `XMTP_ENV=production` for Base App
 - **Paymaster:** `PAYMASTER_URL` (CDP Paymaster + Bundler endpoint)
 - **Redis:** `REDIS_URL`
@@ -122,7 +125,7 @@ See `.env.example`. Key groups:
 
 ## Progress (core agent + miniapp iteration)
 
-- **Agent backend:** Custom tools (fetchLadderQuestion, obfuscateQuestion, manageLadderState), decode tool (LangChain). XMTP: `/arena join`, stake command parsing, rich preview. Swarm: Game Master + Social Coordinator wired in index. Gasless API: `POST /api/stake` and `POST /api/contribute` return encoded calldata for Paymaster (allowlist: stake, contributeToPot).
+- **Agent backend:** xAI orchestration (Vercel AI SDK + @ai-sdk/xai, grok-4-1-fast-reasoning) for freeform chat; custom tools (decode, fetchLadderQuestion, manageLadderState). XMTP: `/arena join`, stake command parsing, rich preview. Swarm: Game Master + Social Coordinator. Gasless API: `POST /api/stake` and `POST /api/contribute` return encoded calldata for Paymaster (allowlist: stake, contributeToPot). Run `npm run test:orchestration` in agent-backend to test prompts (uses `.env`).
 - **Mini-app:** Base manifest, ladder (progress bar, safe milestones), game (timer, lifelines, plain/obfuscated view), leaderboard, feed-pot with gasless preview. viem for future one-tap submit; XMTP noted in lobby.
 - **Contracts:** Deploy script fixed (MillionToken with deployer placeholder, then ArenaPot, then setPotAddress). Seed script in `deploy/seed-pot.ts`.
 - **Tests:** Jest (agent-backend), Cypress (miniapp), root e2e critical path.
