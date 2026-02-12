@@ -60,7 +60,7 @@ export default function FeedPotPage() {
     <main className="min-h-screen bg-arena-bg text-arena-fg p-6 max-w-md mx-auto">
       <h1 className="text-xl font-semibold mb-4">Feed the pot</h1>
       <p className="text-arena-muted text-sm mb-4">
-        Community contributions go to the arena pot. Gasless via Paymaster. One-tap preview below.
+        Community contributions go to the arena pot. 0 gas—sponsored! One-tap preview below.
       </p>
       <label className="block text-sm text-arena-muted mb-1">Round ID</label>
       <input
@@ -91,14 +91,15 @@ export default function FeedPotPage() {
           type="button"
           onClick={handleFeedPot}
           disabled={status === "loading"}
-          className="flex-1 py-3 rounded bg-arena-accent text-white font-medium disabled:opacity-50"
+          className="flex-1 py-3 rounded bg-arena-accent text-white font-medium disabled:opacity-50 min-h-[44px]"
+          aria-label={status === "done" ? "Done" : "Feed pot (0 gas, sponsored)"}
         >
-          {status === "loading" ? "Sending…" : status === "done" ? "Done" : "Feed pot (gasless)"}
+          {status === "loading" ? "Sending…" : status === "done" ? "Done" : "Feed pot (0 gas—sponsored!)"}
         </button>
       </div>
       {preview && (
-        <div className="mt-4 p-3 rounded bg-arena-muted/20 text-sm break-all" role="status">
-          <p className="text-arena-muted mb-1">Preview: contribute to pot</p>
+        <div className="mt-4 p-3 rounded bg-arena-muted/20 text-sm break-all" role="status" aria-live="polite">
+          <p className="text-arena-accent font-medium mb-1">0 gas—sponsored! Preview: contribute to pot</p>
           <p>To: {preview.to}</p>
           <p className="truncate" title={preview.data}>Data: {preview.data.slice(0, 42)}…</p>
         </div>

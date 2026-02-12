@@ -20,6 +20,7 @@ export default function LobbyPage() {
   return (
     <main className="min-h-screen bg-arena-bg text-arena-fg p-6 max-w-md mx-auto">
       <h1 className="text-xl font-semibold mb-4">Lobby</h1>
+      <p className="text-arena-accent text-sm mb-2 font-medium">Unlock prizes—gasless! 0 gas—sponsored.</p>
       <p className="text-arena-muted text-sm mb-4">
         Join an arena via chat: type <strong>/arena join</strong> then open this app.
       </p>

@@ -31,9 +31,9 @@ describe("Millionaire Arena miniapp", () => {
   it("feed-pot page has preview and gasless button", () => {
     cy.visit("/feed-pot");
     cy.contains("Feed the pot");
-    cy.contains("Gasless via Paymaster");
+    cy.contains("0 gas—sponsored!");
     cy.get("input[placeholder='e.g. round1']").type("round1");
     cy.contains("Preview").click();
-    cy.contains("Feed pot (gasless)").should("exist");
+    cy.contains("Feed pot (0 gas—sponsored!)").should("exist");
   });
 });

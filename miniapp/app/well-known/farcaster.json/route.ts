@@ -34,7 +34,7 @@ export async function GET() {
       heroImageUrl: `${siteUrl}/og.png`,
       tagline: "Play instantly",
       ogTitle: "Millionaire Arena",
-      ogDescription: "Skill-based trivia battle royale on Base.",
+      ogDescription: "Skill-based trivia battle royale on Base. Pot size & ladder progress in chat. Join—0 gas, sponsored. No purchase necessary.",
       ogImageUrl: `${siteUrl}/og.png`,
       noindex: true,
     }),
