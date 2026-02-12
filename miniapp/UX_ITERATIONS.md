@@ -9,8 +9,12 @@ Follow-up UX automation on branches `ux-iteration-1` … `ux-iteration-5`. Resea
 
 ## Iteration 2 (ux-iteration-2)
 
-- **Iteration 2:** Rich preview card for chat unfurl (pot/players/ladder); one-tap Base Accounts sign-in CTA.
-- **Iteration 3:** Vertical ladder scroll + haptics (if available); countdown pulse animation; real-time leaderboard with avatars.
+- **Done:** Vertical ladder scroll (max-h, overflow-y-auto) with glowing milestones at Q5/Q10 (arena-ladder-milestone CSS animation); 30s countdown as SVG circle (stroke-dashoffset); pulse when ≤10s; lifeline buttons with cost preview in title and label (e.g. "50:50 (10 $MILLION?)"); 44px lifeline touch targets; progress bar with "Safe at Q5, Q10" caption.
+- **Test:** Build + E2E (dev server required for Cypress).
+
+## Iteration 3 (ux-iteration-3)
+
+- **Iteration 3:** Real-time leaderboard with avatars/display names; pot feed banner; shareable recap.
 - **Iteration 4:** Embedded XMTP chat panel; pot feed banners; shareable recaps.
 - **Iteration 5:** Post-game confetti on win; loss feedback; dark/light mode toggle; optional AI suggestions.
 

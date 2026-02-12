@@ -15,23 +15,23 @@ export default function LadderPage() {
       <p className="text-arena-muted text-sm mb-4">US show style. Safe at Q5 and Q10.</p>
 
       <div className="mb-6" role="progressbar" aria-valuenow={0} aria-valuemin={0} aria-valuemax={LADDER_SIZE} aria-label="Ladder progress">
-        <div className="h-2 rounded-full bg-arena-muted/30 overflow-hidden">
-          <div className="h-full bg-arena-accent rounded-full transition-all" style={{ width: "0%" }} />
+        <div className="h-3 rounded-full bg-arena-muted/30 overflow-hidden">
+          <div className="h-full bg-arena-accent rounded-full transition-all duration-500" style={{ width: "0%" }} />
         </div>
-        <p className="text-xs text-arena-muted mt-1">0 / {LADDER_SIZE} questions</p>
+        <p className="text-xs text-arena-muted mt-1">0 / {LADDER_SIZE} questions • Safe at Q5, Q10</p>
       </div>
 
-      <ol className="list-decimal list-inside space-y-2">
+      <ol className="list-decimal list-inside space-y-2 max-h-[50vh] overflow-y-auto overscroll-contain" aria-label="Question ladder">
         {MULTIPLIERS.map((mul, i) => {
           const isSafe = SAFE_AT.includes(i + 1);
           return (
             <li
               key={i}
-              className={`flex justify-between items-center py-2 px-3 rounded-lg ${isSafe ? "bg-arena-accent/10 border border-arena-accent/30" : ""}`}
+              className={`flex justify-between items-center py-3 px-3 rounded-lg min-h-[44px] ${isSafe ? "arena-ladder-milestone bg-arena-accent/15 border border-arena-accent/50" : "bg-arena-muted/5"}`}
             >
               <span className="text-arena-fg">
                 Q{i + 1} — <span className="text-arena-muted">{TIERS[i]}</span>
-                {isSafe && <span className="ml-2 text-xs text-arena-accent" title="Safe milestone">Safe</span>}
+                {isSafe && <span className="ml-2 text-xs text-arena-accent font-medium" title="Safe milestone—walk away with winnings up to here">Safe</span>}
               </span>
               <strong>{mul}x</strong>
             </li>

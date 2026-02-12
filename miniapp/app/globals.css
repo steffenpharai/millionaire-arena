@@ -8,6 +8,7 @@
   --muted: #a1a1aa;
   --accent: #3b82f6;
   /* WCAG AA: contrast ratio ≥ 4.5:1 for normal text */
+  --ladder-glow: 0 0 12px rgba(59, 130, 246, 0.5), 0 0 24px rgba(59, 130, 246, 0.25);
 }
 * {
   box-sizing: border-box;
@@ -18,4 +19,15 @@ body {
   background: var(--bg);
   color: var(--fg);
   min-height: 100vh;
+}
+.arena-ladder-milestone {
+  box-shadow: var(--ladder-glow);
+  animation: arena-glow-pulse 2s ease-in-out infinite;
+}
+@keyframes arena-glow-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+.arena-countdown-circle {
+  transform: rotate(-90deg); /* start from top */
 }
