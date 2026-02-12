@@ -17,8 +17,8 @@ export default function TermsPage() {
           By participating you agree to these terms. The game runs on Base L2. Token and pot mechanics are described in the project documentation. NY and other jurisdictions: this contest is structured as skill-based where applicable.
         </p>
       </div>
-      <Link href="/" className="inline-block mt-6 py-2 px-4 rounded bg-arena-accent text-white">
-        Back
+      <Link href="/" className="inline-block mt-6 py-2 px-4 rounded-xl bg-gradient-to-r from-[#0066FF] to-[#7C3AED] text-white font-medium min-h-[44px] flex items-center">
+        ← Back to home
       </Link>
     </main>
   );

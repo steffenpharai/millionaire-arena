@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./components/ThemeProvider";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 const siteUrl = process.env.NEXT_PUBLIC_URL || "https://millionaire-arena.example.com";
 
@@ -51,8 +54,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-        <ThemeProvider>{children}</ThemeProvider>
+      <body className={`${inter.className} min-h-screen bg-[#0F0F1A] text-white antialiased`}>
+        <ThemeProvider>
+          <div className="mx-auto max-w-[428px] min-h-screen relative">
+            {children}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

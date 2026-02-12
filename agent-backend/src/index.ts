@@ -22,6 +22,7 @@ import {
 } from "./tools/index.js";
 import { listLobbies } from "./api/lobbies.js";
 import { prepareStakeCall, prepareContributeCall } from "./agents/payment-economy.js";
+import { runOrchestrator } from "./orchestrator.js";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const redis = new (IORedis as any)(process.env.REDIS_URL || "redis://localhost:6379");
@@ -172,6 +173,20 @@ async function main() {
         ? `Decoded: ${decoded.question} | Answers: ${decoded.answers.join(", ")}`
         : "Could not decode.";
       await send(out);
+      return;
+    }
+
+    // Agentic fallback: XAI grok-4-1-fast-reasoning + tools (decode, ladder, fetch question)
+    if (process.env.XAI_API_KEY) {
+      try {
+        const reply = await runOrchestrator(text, { redis });
+        await send(reply);
+      } catch (e) {
+        console.error("Orchestrator error:", e);
+        await send("Something went wrong. Try /arena join or ask for a question 1–15.");
+      }
+    } else {
+      await send("Ask me to join the arena (/arena join), stake, get question 1–15, or decode an arena riddle.");
     }
   });
 
