@@ -32,7 +32,7 @@ describe("Millionaire Arena miniapp", () => {
     cy.visit("/feed-pot");
     cy.contains("Feed the pot");
     cy.contains("Gasless via Paymaster");
-    cy.get("input[placeholder*='Round']").type("round1");
+    cy.get("input[placeholder='e.g. round1']").type("round1");
     cy.contains("Preview").click();
     cy.contains("Feed pot (gasless)").should("exist");
   });

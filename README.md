@@ -112,12 +112,12 @@ See `.env.example`. Key groups:
 1. **Unit (agent):** Jest in `agent-backend/`: OpenTDB mapping, fetchLadderQuestion, obfuscate/decode tool, manageLadderState: `cd agent-backend && npm run test`.
 2. **Unit (contracts):** `cd contracts && forge test` (from WSL if Forge is there).
 3. **E2E (root):** Join flow, ladder mapping, decode round-trip: `npm run test:e2e` from repo root.
-4. **E2E (miniapp):** Cypress for ladder, game, feed-pot: `cd miniapp && npm run test:e2e` (run with `npm run dev` in another terminal so the app is served at http://localhost:3000).
+4. **E2E (miniapp):** Cypress for ladder, game, feed-pot: ensure the app is served at http://localhost:3000 (`cd miniapp && npm run dev`), then in another terminal `cd miniapp && npm run test:e2e` (uses `cypress.config.cjs`; runs via `npx cypress run`).
 5. **Deploy:** Base Sepolia first, then mainnet with policy and compliance in place.
 
 ## Verification
 
-- Run from repo root: `npm run test` (agent Jest + root e2e). From WSL in `contracts/`: `forge test`. For miniapp Cypress: start miniapp with `cd miniapp && npm run dev`, then `cd miniapp && npm run test:e2e`.
+- Run from repo root: `npm run test` (agent Jest + root e2e). From WSL in `contracts/`: `forge test`. For miniapp Cypress: start miniapp with `cd miniapp && npm run dev`, then in another terminal `cd miniapp && npm run test:e2e`.
 - All tests must pass before considering the implementation complete.
 
 ## Progress (core agent + miniapp iteration)
