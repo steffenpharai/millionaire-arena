@@ -1,0 +1,28 @@
+{
+  "name": "millionaire-arena-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "start": "node --experimental-vm-modules dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "test": "npx tsx test/tools.test.ts"
+  },
+  "dependencies": {
+    "@langchain/core": "^1.1.22",
+    "@langchain/openai": "^1.2.7",
+    "@xmtp/agent-sdk": "^2.1.0",
+    "dotenv": "^17.2.4",
+    "ioredis": "^5.9.2",
+    "langchain": "^1.2.21",
+    "openai": "^6.21.0",
+    "viem": "^2.45.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.3",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}

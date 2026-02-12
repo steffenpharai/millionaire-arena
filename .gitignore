@@ -1,0 +1,29 @@
+node_modules/
+.env
+.env.local
+*.log
+dist/
+out/
+.next/
+coverage/
+.vercel/
+db/
+*.db
+wallet_data.txt
+.cursor/
+
+# Foundry
+cache/
+broadcast/
+lib/
+
+# Forked/cloned reference repos (clone separately per README)
+agentkit/
+guides/
+xmtp-js/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
